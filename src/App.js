@@ -1,24 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Todo from "./components/Todo";
+import TodoForm from "./components/TodoForm";
 
 function App() {
+  const [todos, setTodos] = useState([
+    {
+      text: "Learn Hoos",
+      isCompleted: false
+    },
+    {
+      text: "Use Hooks with Redux",
+      isCompleted: false
+    }
+  ]);
+
+  const addTodo = text => {
+    const newTodo = {
+      text,
+      isCompleted: false
+    };
+    const newTodos = [...todos, newTodo];
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+  const markCompleted = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = !newTodos[index].isCompleted;
+    setTodos(newTodos);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h5>Todo List Component using Hooks</h5>
+      <div className="todo-list">
+        {(todos &&
+          todos.map((todo, index) => (
+            <Todo
+              key={index}
+              index={index}
+              todo={todo}
+              markCompleted={markCompleted}
+              deleteTodo={deleteTodo}
+            />
+          ))) || <h4>No Todos Added yet</h4>}
+
+        <TodoForm addTodo={addTodo} />
+      </div>
     </div>
   );
 }
